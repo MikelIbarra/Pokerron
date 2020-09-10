@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tabs="clr-namespace:Sharpnado.Presentation.Forms.CustomViews.Tabs;assembly=Sharpnado.Presentation.Forms"
+             xmlns:views="clr-namespace:PokerronBank.UI.Views;assembly=PokerronBank.UI"
+             xmlns:helper="clr-namespace:PokerronBank.UI.ViewModels.Helper;assembly=PokerronBank.UI"
+             x:Class="PokerronBank.UI.Views.MainView">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="BottomTabStyle" TargetType="tabs:BottomTabItem">
+                <Setter Property="SelectedTabColor" Value="Blue" />
+                <Setter Property="UnselectedLabelColor" Value="LightGray" />
+                <Setter Property="UnselectedIconColor" Value="LightGray" />
+          
+                <Setter Property="LabelSize" Value="14" />
+                <Setter Property="IconSize" Value="28" />
+            </Style>
+        </ResourceDictionary>
+        </ContentPage.Resources>
+    <ContentPage.Content>
+
+        <Grid ColumnSpacing="0"
+              RowSpacing="0"
+              >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <StackLayout BackgroundColor="LightGreen">
+                <Image Source="Pokerron2.png"  
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"
+                       />
+
+            </StackLayout>
+           
+            <tabs:ViewSwitcher x:Name="Switcher"
+                               Grid.Row="1"
+                               Animate="true"
+                               
+                               SelectedIndex="{Binding SelectedViewModelIndex, 
+                                               Mode=TwoWay}">
+                <views:PartidaView   />
+                <views:IngresosView  />
+                <views:DeudasView  />
+            </tabs:ViewSwitcher>
+            <!-- first 4 rows then... -->
+            <tabs:TabHostView x:Name="TabHost"
+                              Grid.Row="2"
+                              BackgroundColor="DarkGray"
+                              SelectedIndex="{Binding Source={x:Reference Switcher}, 
+                                              Path=SelectedIndex, 
+                                              Mode=TwoWay}">
+                <tabs:TabHostView.Tabs >
+                    <tabs:BottomTabItem Label="Partida"   VerticalOptions="End" 
+                                            Style="{StaticResource BottomTabStyle}" 
+                                          IconImageSource="Partida2Png64.png"
+                                          
+                                            />
+                    <tabs:BottomTabItem Label="Ingresos" VerticalOptions="End"  
+                                        Style="{StaticResource BottomTabStyle}"
+                                        IconImageSource="IngresosPng64.png"/>
+                    <tabs:BottomTabItem Label="Deudas"    VerticalOptions="End" 
+                                        Style="{StaticResource BottomTabStyle}"
+                                        IconImageSource="Deudas2Png64.png"
+                                        />
+                </tabs:TabHostView.Tabs>
+            </tabs:TabHostView>
+
+        </Grid>
+
+
+           
+</ContentPage.Content>
+</ContentPage>

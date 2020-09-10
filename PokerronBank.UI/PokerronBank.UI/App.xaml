@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PokerronBank.UI.App">
+    <Application.Resources>
+        <!--<ResourceDictionary Source="DarkTheme.xaml" />-->
+
+        <Style x:Key="BotonPrincipal" TargetType="Button">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="BorderColor" Value="Black" />
+            <Setter Property="BorderWidth" Value="2" />
+            <Setter Property="WidthRequest" Value="80" />
+            <Setter Property="HeightRequest" Value="80" />
+            <Setter Property="CornerRadius" Value="40" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="BackgroundColor" Value="LightGray" />
+        </Style>
+
+       
+    </Application.Resources>
+</Application>
+    
+    

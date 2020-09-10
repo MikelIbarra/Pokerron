@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helper="clr-namespace:PokerronBank.UI.Views.Helper;assembly=PokerronBank.UI"
+             x:Class="PokerronBank.UI.Views.IngresosView">
+  <ContentView.Content>
+  
+      <Grid>
+          <Grid.RowDefinitions>
+                <RowDefinition Height="110"/>
+              <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+            <Grid Grid.Row="0"  BackgroundColor="LightGreen">
+              <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="90"/>
+              </Grid.ColumnDefinitions>
+                <ImageButton  Grid.Column="0"  BorderColor="Transparent" BackgroundColor="Transparent"
+                              Margin="5,0,0,0" Source="ButtonNuevoIngreso.png" Clicked="BotonNuevoIngreso" >
+                    <ImageButton.Effects>
+                        <helper:TransparentSelectableEffect />
+                    </ImageButton.Effects>
+                </ImageButton>
+                <StackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="{Binding DineroEnCaja}"  HorizontalOptions="Center" FontAttributes="Bold"/>
+                    <Label Text="{Binding DineroParaCambiar}"  HorizontalOptions="Center"/>
+                    <Label Text="{Binding JugadoresPartida}"  HorizontalOptions="Center"/>
+                    <Label Text="{Binding TiempoPartida}"  HorizontalOptions="Center"/>
+                </StackLayout>
+
+            </Grid>
+          <ListView  Grid.Row="1" x:Name="ListIngresos" ItemsSource="{Binding Ingresos}">
+              <ListView.ItemTemplate>
+                  <DataTemplate>
+                      <ViewCell>
+                          <StackLayout Orientation="Horizontal" >
+                                <Label Text="{Binding Reference.Jugador.Nombre}" FontAttributes="Bold" VerticalTextAlignment="Center" Margin="5,0,0,0"  />
+                              <Label Text="{Binding DetalleIngreso}"  VerticalTextAlignment="Center" />
+                              <!--<Label  VerticalTextAlignment="Center" >
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Reference.EsCash}" Value="false">
+                                            <Setter Property="Text"  Value="en un pagare" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Reference.EsCash}" Value="true">
+                                            <Setter Property="Text"  Value="en ca$h" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>-->
+
+                          </StackLayout>
+                      </ViewCell>
+                  </DataTemplate>
+              </ListView.ItemTemplate>
+          </ListView>
+      </Grid>
+  </ContentView.Content>
+</ContentView>

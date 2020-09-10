@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helper="clr-namespace:PokerronBank.UI.Views.Helper;assembly=PokerronBank.UI"
+             x:Class="PokerronBank.UI.Views.PartidaView">
+
+
+
+
+    <ContentView.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="110"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0"  BackgroundColor="LightGreen">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="90"/>
+                </Grid.ColumnDefinitions>
+                <ImageButton  Grid.Column="0" 
+                              BorderColor="Transparent"
+                              BackgroundColor="Transparent"
+                        Margin="5,0,0,0"
+                            Clicked="BotonNuevoJugador" >
+                    <ImageButton.Effects>
+                        <helper:TransparentSelectableEffect />
+                    </ImageButton.Effects>
+                    <ImageButton.Triggers>
+                        <DataTrigger TargetType="ImageButton" Binding="{Binding PartidaTerminada}" Value="false">
+                            <Setter Property="Source"  Value="ButtonAnadirJugador.png" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="ImageButton" Binding="{Binding PartidaTerminada}" Value="true">
+                            <Setter Property="Source"  Value="ButtonNuevaPartida.png"/>
+                        </DataTrigger>
+                    </ImageButton.Triggers>
+                </ImageButton>
+                <StackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="{Binding DineroEnCaja}"  HorizontalOptions="Center" FontAttributes="Bold"/>
+                    <Label Text="{Binding DineroParaCambiar}"  HorizontalOptions="Center"/>
+                    <Label Text="{Binding JugadoresPartida}"  HorizontalOptions="Center"/>
+                    <Label Text="{Binding TiempoPartida}"  HorizontalOptions="Center"/>
+                </StackLayout>
+                <ImageButton  Grid.Column="2" 
+                              BorderColor="Transparent"
+                              BackgroundColor="Transparent"
+                              Margin="5,0,0,0"
+                              Clicked="BotonTerminarPartida" >
+                    <ImageButton.Effects>
+                        <helper:TransparentSelectableEffect />
+                    </ImageButton.Effects>
+                    <ImageButton.Triggers>
+                        <DataTrigger TargetType="ImageButton" Binding="{Binding PartidaTerminada}" Value="false">
+                            <Setter Property="Source"  Value="ButtonFinPartida.png" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="ImageButton" Binding="{Binding PartidaTerminada}" Value="true">
+                            <Setter Property="Source"  Value="ButtonReiniciarPartida.png"/>
+                        </DataTrigger>
+                    </ImageButton.Triggers>
+                </ImageButton>
+                <!--<Button Grid.Column="2" Text="Fin partida"   x:Name="BotonFinPartidaReiniciar"
+                        Style="{StaticResource BotonPrincipal}" Clicked="BotonTerminarPartida">
+                   
+                </Button>-->
+            </Grid>
+            <ListView Grid.Row="1" x:Name="JugadoresList" ItemsSource="{Binding Jugadores}" HasUnevenRows="true" ItemTapped="JugadoresList_ItemTapped">
+                <ListView.ItemTemplate >
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Clicked="OnCambiar"
+                                          CommandParameter="{Binding .}"
+                                          Text="Cambiar" />
+                                <MenuItem Clicked="OnBorrar"
+                                          CommandParameter="{Binding .}"
+                                          Text="Borrar" IsDestructive="True" />
+                            </ViewCell.ContextActions>
+                            <Grid Margin="0,2,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackLayout Orientation="Horizontal"  Grid.Column="0">
+                                    <Label Text="{Binding Reference.Nombre}" FontAttributes="Bold" VerticalTextAlignment="Center" Margin="5,0,0,0" />
+                                    <Image  Source="cofre.png" HeightRequest="24" WidthRequest="24">
+                                        <Image.Triggers>
+                                            <DataTrigger TargetType="Image" Binding="{Binding Reference.EsCaja}" Value="false">
+                                                <Setter Property="IsVisible"  Value="False" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image" Binding="{Binding Reference.EsCaja}" Value="true">
+                                                <Setter Property="IsVisible"  Value="True"  />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+                                    <Label Text="{Binding Total}"  VerticalTextAlignment="Center" />
+                                </StackLayout>
+                                <Grid Margin="50,0,0,0" Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition  Height="20"/>
+                                        <RowDefinition  Height="40"/>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="0" >
+                                        <Label Text="Ingresado: "  VerticalTextAlignment="End" FontSize="12" FontAttributes="Italic"/>
+                                        <Label Text="{Binding DineroIngresado}"  VerticalTextAlignment="End" FontSize="12" FontAttributes="Italic"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="1"  >
+                                        <Label Text="Final: "  VerticalTextAlignment="Center" FontSize="12" FontAttributes="Italic"/>
+                                        
+                                        <Entry  Text="{Binding DineroAlFinal}" Keyboard="Numeric"  HorizontalOptions="FillAndExpand" VerticalTextAlignment="Start"
+                                                CursorPosition="0" SelectionLength="20" FontSize="12" >
+                                            <Entry.Triggers>
+                                                <DataTrigger TargetType="Entry" Binding="{Binding MainViewModel.PartidaTerminada}" Value="false">
+                                                    <Setter Property="IsEnabled"  Value="True" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Entry" Binding="{Binding MainViewModel.PartidaTerminada}" Value="true">
+                                                    <Setter Property="IsEnabled"  Value="False" />
+                                                </DataTrigger>
+                                            </Entry.Triggers>
+                                        </Entry> 
+                                    </StackLayout>
+                                </Grid>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

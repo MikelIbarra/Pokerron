@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PokerronBank.Data\PokerronBank.Data.csproj" />
+    <ProjectReference Include="..\PokerronBank.Model\PokerronBank.Model.csproj" />
+  </ItemGroup>
+
+</Project>
