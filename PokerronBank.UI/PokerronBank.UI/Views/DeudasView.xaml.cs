@@ -28,7 +28,7 @@ namespace PokerronBank.UI.Views
             canClickCalcularDeudas = false;
             if (!ViewModelViewManager.MainViewModel.CajaCuadra)
             {
-                await Application.Current.MainPage.DisplayAlert("","No es posible cacular deudas \nla caja no cuadra", "Ok");
+                await Application.Current.MainPage.DisplayAlert("","No es posible cacular deudas \nLa caja no cuadra", "Ok");
             }
             ViewModelViewManager.MainViewModel.CalcularDeudas.Execute(null);
             canClickCalcularDeudas = true;

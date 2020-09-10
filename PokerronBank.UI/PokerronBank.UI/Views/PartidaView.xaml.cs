@@ -38,7 +38,7 @@ namespace PokerronBank.UI.Views
             }
             else
             {
-                var confirm = await Application.Current.MainPage.DisplayAlert("Confirmar nueva partida \ntodos los datos se borraran", "", "Aceptar", "Cancelar");
+                var confirm = await Application.Current.MainPage.DisplayAlert("Confirmar nueva partida \nTodos los datos se borraran", "", "Aceptar", "Cancelar");
                 if (confirm)
                 {
                     ViewModelViewManager.MainViewModel.PartidaNueva.Execute(null);
@@ -59,7 +59,7 @@ namespace PokerronBank.UI.Views
             {
                 if (!ViewModelViewManager.MainViewModel.CajaCuadra)
                 {
-                    await Application.Current.MainPage.DisplayAlert("", "No es posible finalizar partida \nla caja no cuadra", "Ok");
+                    await Application.Current.MainPage.DisplayAlert("", "No es posible finalizar partida \nLa caja no cuadra", "Ok");
                 }
                 else
                 {

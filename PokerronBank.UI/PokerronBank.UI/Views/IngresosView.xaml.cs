@@ -27,7 +27,7 @@ namespace PokerronBank.UI.Views
             canClickBotonNuevoIngreso = false;
             if (ViewModelViewManager.MainViewModel.Partida.Reference.Terminada)
             {
-                await Application.Current.MainPage.DisplayAlert("", "No es posible hacer el ingreso \nla partida esta termniada", "Ok");
+                await Application.Current.MainPage.DisplayAlert("", "No es posible hacer el ingreso \nLa partida esta termniada", "Ok");
             }
             else
             {
