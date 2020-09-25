@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" 
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                 x:Class="PokerronBank.UI.Views.Popups.PopupBuscarContacto">
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8"
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"
+        />
+    </pages:PopupPage.Animation>
+    <pages:PopupPage.Content>
+        <Frame Margin="30" Padding="10"  Background="{AppThemeBinding Light=White, Dark=Black}">
+            <StackLayout>
+                <SearchBar x:Name="searchContactos" TextChanged="SearchBar_TextChanged"></SearchBar>
+                <ListView   x:Name="ListContactos" ItemsSource="{Binding Contactos}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" >
+                                    <Label Text="{Binding Nombre}" FontAttributes="Bold" VerticalTextAlignment="Center" Margin="5,0,0,0"  />
+                                    <Label Text="{Binding Numero}"  VerticalTextAlignment="Center" />
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TapGestureRecognizer_Tapped"/>
+                                        <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="TapGestureRecognizer_Tapped_1"/>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Button Text="Añadir" Clicked="ButtonOk" CornerRadius="20"/>
+                <Button Text="Cancelar" Clicked="ButtonCancel" CornerRadius="20"/>
+            </StackLayout>
+        </Frame>
+    </pages:PopupPage.Content>
+</pages:PopupPage>

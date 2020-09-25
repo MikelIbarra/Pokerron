@@ -4,9 +4,11 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Plugin.Permissions;
 using PokerronBank.UI.Droid;
 using PokerronBank.UI.Views.Helper;
 using Sharpnado.Presentation.Forms.Droid;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: ResolutionGroupName("MobileClient")]
@@ -32,10 +34,10 @@ namespace PokerronBank.UI.Droid
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
+            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+      
 
-       
     }
 }

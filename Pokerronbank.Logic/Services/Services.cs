@@ -25,18 +25,29 @@ namespace Pokerronbank.Logic.Services
             partida.Jugadores.ForEach(x => x.DeudaHelp -= x.DineroAlFinal);
             if (partida.Ingresos.Sum(x => x.Cantidad) != partida.Jugadores.Sum(x => x.DineroAlFinal)) return false;
             var cash = partida.Ingresos.Where(x => x.EsCash).Sum(x => x.Cantidad);
-          
+
+            
+
             foreach (var item in partida.Jugadores)
             {
+                //cash ingresado
+                var cashIngresado = partida.Ingresos.Where(x => x.Jugador == item && x.EsCash).Sum(x => x.Cantidad);
+                if (cashIngresado > 0)
+                {
+                    item.DeudaDetalle = "Ha ingresado " + cashIngresado + "€ en cash";
+                }
+                //cancelar pagares
                 if (item.DineroAlFinal > 0 && partida.Ingresos.Any(x => x.Jugador == item && !x.EsCash))
                 {
                     if (partida.Ingresos.Where(x => x.Jugador == item && !x.EsCash).Sum(x=>x.Cantidad) >= item.DineroAlFinal)
                     {
-                        item.DeudaDetalle = "Cancela " + item.DineroAlFinal + "€ en pagares";
+                        if (item.DeudaDetalle != "") item.DeudaDetalle += "\n";
+                        item.DeudaDetalle += "Cancela " + item.DineroAlFinal + "€ en pagares";
                     }
                     else
                     {
-                        item.DeudaDetalle = "Cancela " + partida.Ingresos.Where(x => x.Jugador == item && !x.EsCash).Sum(x => x.Cantidad) + "€ en pagares";
+                        if (item.DeudaDetalle != "") item.DeudaDetalle += "\n";
+                        item.DeudaDetalle += "Cancela " + partida.Ingresos.Where(x => x.Jugador == item && !x.EsCash).Sum(x => x.Cantidad) + "€ en pagares";
                     }
                 }
             }
@@ -171,9 +182,9 @@ namespace Pokerronbank.Logic.Services
         }
 
 
-        public Jugador AddNewJugador(string nombre, bool esCaja, Partida partida)
+        public Jugador AddNewJugador(string nombre, bool esCaja, bool esAnfitrion, string numeroTelefono, bool whatsAppFunciona, Partida partida)
         {
-            var newItem = new Jugador(nombre, esCaja, partida);
+            var newItem = new Jugador(nombre, esCaja,esAnfitrion,numeroTelefono, whatsAppFunciona, partida);
             Core.Repository.Add(newItem);
             Core.Repository.SaveAll();
             return newItem;
@@ -200,5 +211,7 @@ namespace Pokerronbank.Logic.Services
             Core.Repository.SaveAll();
             return newItem;
         }
+
+      
     }
 }

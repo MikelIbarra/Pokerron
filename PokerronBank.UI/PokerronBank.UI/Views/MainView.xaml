@@ -65,6 +65,11 @@
                                         Style="{StaticResource BottomTabStyle}"
                                         IconImageSource="Deudas2Png64.png"
                                         />
+                    <tabs:BottomTabItem  Label="Compras"  VerticalOptions="End" 
+                                        Style="{StaticResource BottomTabStyle}"
+                                      
+                   />
+                   
                 </tabs:TabHostView.Tabs>
             </tabs:TabHostView>
 

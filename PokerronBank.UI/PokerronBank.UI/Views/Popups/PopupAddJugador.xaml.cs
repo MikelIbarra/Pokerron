@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PokerronBank.UI.ViewModels.Helper;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,11 +14,27 @@ namespace PokerronBank.UI.Views.Popups
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PopupAddJugador : Rg.Plugins.Popup.Pages.PopupPage
     {
+        private ContactViewItem _contact;
+
+
         public PopupAddJugador()
         {
             
             InitializeComponent();
+            
 
+        }
+
+        public string Nombre { set => InputNombre.Text = value; }
+
+        public ContactViewItem Contact
+        {
+            get => _contact;
+            set
+            {
+                Telefono.Text = value == null ? "" : value.Numero;
+                _contact = value;
+            }
         }
 
         protected override void OnAppearing()
@@ -117,27 +134,49 @@ namespace PokerronBank.UI.Views.Popups
             }
             else
             {
-                ViewModelViewManager.MainViewModel.AddJugador.Execute(new Tuple<string, bool>(InputNombre.Text, CheckBoxEsCaja.IsChecked));
-                await PopAsync();
+                InputStart = false;
+                var terminar = true;
+                var whatsAppFunciona = false;
 
-                var confirm = await Application.Current.MainPage.DisplayAlert("Añadir ingreso a " + InputNombre.Text + "?", "", "Aceptar", "Cancelar");
-                if (confirm)
+                if (!string.IsNullOrEmpty(Contact?.Numero))
                 {
-                    ViewModelViewManager.MainViewModel.SelectedJugadorPicker = ViewModelViewManager.MainViewModel.Jugadores.FirstOrDefault(x => x.Reference.Nombre == InputNombre.Text);
-                    await PushAsync(new PopupAddIngreso());
+                    whatsAppFunciona = ViewModelViewManager.MainViewModel.SendWhatsApp(Contact.Numero,"Has entrado a la partida");
+                    if (! await Application.Current.MainPage.DisplayAlert(InputNombre.Text + " ha recibido un Whatsapp?", "", "Si", "No"))
+                    {
+                        if (await Application.Current.MainPage.DisplayAlert("Quieres cambiar el contacto?", "", "Si", "No"))
+                        {
+                            terminar = false;
+                        }
+                    }
                 }
-                else
+
+                if (terminar)
                 {
-                    ViewModelViewManager.MainViewModel.SelectedJugadorPicker = null;
+                    ViewModelViewManager.MainViewModel.AddJugador.Execute(new Tuple<string, bool, bool, bool, ContactViewItem>(InputNombre.Text, CheckBoxEsCaja.IsChecked, CheckBoxAnfitrion.IsChecked, whatsAppFunciona, Contact));
+                    await PopAsync();
+                    if (await Application.Current.MainPage.DisplayAlert("Añadir ingreso a " + InputNombre.Text + "?", "", "Aceptar", "Cancelar"))
+                    {
+                        ViewModelViewManager.MainViewModel.FocusOnIngresosPicker = true;
+                
+                        await PushAsync(new PopupAddIngreso());
+                        ViewModelViewManager.MainViewModel.SelectedJugadorPicker = ViewModelViewManager.MainViewModel.Jugadores.FirstOrDefault(x => x.Reference.Nombre == InputNombre.Text);
+                        ViewModelViewManager.MainViewModel.FocusOnIngresosPicker = false;
+                    }
+                    
                 }
             }
-           
 
         }
 
         private void ButtonCancel(object sender, EventArgs e)
         {
             Instance.PopAsync();
+        }
+
+        private async void ButtonContactos(object sender, EventArgs e)
+        {
+            var buscarContacto = new PopupBuscarContacto(this);
+            await PopupNavigation.PushAsync(buscarContacto);
         }
     }
 }

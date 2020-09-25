@@ -22,7 +22,7 @@
     <StackLayout >
         <Frame Margin="30" Padding="10"  Background="{AppThemeBinding Light=White, Dark=Black}">
             <StackLayout>
-                <Picker Title="Lista jugadores" ItemsSource="{Binding Jugadores}" ItemDisplayBinding="{Binding Reference.Nombre}" 
+                <Picker Title="Lista jugadores" x:Name="ListaJugadores" ItemsSource="{Binding Jugadores}" ItemDisplayBinding="{Binding Reference.Nombre}" 
                         SelectedItem="{Binding SelectedJugadorPicker, Mode=TwoWay}"  />
 
                 <Label Text="Cantidad:"  />

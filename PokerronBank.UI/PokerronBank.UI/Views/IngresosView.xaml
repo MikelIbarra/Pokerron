@@ -37,17 +37,6 @@
                           <StackLayout Orientation="Horizontal" >
                                 <Label Text="{Binding Reference.Jugador.Nombre}" FontAttributes="Bold" VerticalTextAlignment="Center" Margin="5,0,0,0"  />
                               <Label Text="{Binding DetalleIngreso}"  VerticalTextAlignment="Center" />
-                              <!--<Label  VerticalTextAlignment="Center" >
-                                    <Label.Triggers>
-                                        <DataTrigger TargetType="Label" Binding="{Binding Reference.EsCash}" Value="false">
-                                            <Setter Property="Text"  Value="en un pagare" />
-                                        </DataTrigger>
-                                        <DataTrigger TargetType="Label" Binding="{Binding Reference.EsCash}" Value="true">
-                                            <Setter Property="Text"  Value="en ca$h" />
-                                        </DataTrigger>
-                                    </Label.Triggers>
-                                </Label>-->
-
                           </StackLayout>
                       </ViewCell>
                   </DataTemplate>

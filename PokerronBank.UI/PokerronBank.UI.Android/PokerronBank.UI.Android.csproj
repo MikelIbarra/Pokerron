@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidTransparentSelectableEffect.cs" />
+    <Compile Include="ContactService.cs" />
     <Compile Include="Implementations\ConfigDataBase.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MyEntryRenderer.cs" />
@@ -225,7 +226,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionPokerronBankUIAndroidHideInfoBar="True" XamarinHotReloadUnhandledDeviceExceptionPokerronBankUIAndroidHideInfoBar="True" />
+      <UserProperties XamarinHotReloadUnhandledDeviceExceptionPokerronBankUIAndroidHideInfoBar="True" XamarinHotReloadDebuggerTimeoutExceptionPokerronBankUIAndroidHideInfoBar="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

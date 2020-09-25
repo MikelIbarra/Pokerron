@@ -102,11 +102,11 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <StackLayout Orientation="Horizontal" Grid.Row="0" >
-                                        <Label Text="Ingresado: "  VerticalTextAlignment="End" FontSize="12" FontAttributes="Italic"/>
+                                        <Label Text="Dinero ingresado: "  VerticalTextAlignment="End" FontSize="12" FontAttributes="Italic"/>
                                         <Label Text="{Binding DineroIngresado}"  VerticalTextAlignment="End" FontSize="12" FontAttributes="Italic"/>
                                     </StackLayout>
                                     <StackLayout Orientation="Horizontal" Grid.Row="1"  >
-                                        <Label Text="Final: "  VerticalTextAlignment="Center" FontSize="12" FontAttributes="Italic"/>
+                                        <Label Text="Chips al final: "  VerticalTextAlignment="Center" FontSize="12" FontAttributes="Italic"/>
                                         
                                         <Entry  Text="{Binding DineroAlFinal}" Keyboard="Numeric"  HorizontalOptions="FillAndExpand" VerticalTextAlignment="Start"
                                                 CursorPosition="0" SelectionLength="20" FontSize="12" >

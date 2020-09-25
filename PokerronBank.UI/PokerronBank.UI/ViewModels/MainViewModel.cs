@@ -4,7 +4,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging.Abstractions;
+using Plugin.ContactService.Shared;
 using Pokerronbank.Logic;
 using PokerronBank.Model;
 using PokerronBank.Model.Contracts;
@@ -13,23 +15,29 @@ using PokerronBank.UI.ViewModels.Helper;
 using Sharpnado.Presentation.Forms.Commands;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
+using Xamarin.Forms.OpenWhatsApp;
 
 namespace PokerronBank.UI.ViewModels
 {
-    public class MainViewModel : ViewModelBase 
+    public class MainViewModel : ViewModelBase
     {
         private int _selectedViewModelIndex;
 
         #region Collections
 
-        public ObservableCollection<JugadorViewItem> Jugadores { get; set; } = new ObservableCollection<JugadorViewItem>();
+        public ObservableCollection<JugadorViewItem> Jugadores { get; set; } =
+            new ObservableCollection<JugadorViewItem>();
 
-        public ObservableCollection<IngresoViewItem> Ingresos { get; set; } = new ObservableCollection<IngresoViewItem>();
+        public ObservableCollection<IngresoViewItem> Ingresos { get; set; } =
+            new ObservableCollection<IngresoViewItem>();
+
+        public ObservableCollection<ContactViewItem> Contacts { get; set; } =
+            new ObservableCollection<ContactViewItem>();
 
 
         #endregion
 
-        public PartidaViewItem Partida{ get; set; }
+        public PartidaViewItem Partida { get; set; }
 
         #region Commands
 
@@ -40,7 +48,7 @@ namespace PokerronBank.UI.ViewModels
         public DelegateCommand FinPartida { get; set; }
         public DelegateCommand ReiniciarPartida { get; set; }
         public DelegateCommand PartidaNueva { get; set; }
-    
+
 
 
         #endregion
@@ -48,29 +56,37 @@ namespace PokerronBank.UI.ViewModels
         #region Selected items
 
         public JugadorViewItem SelectedJugadorPicker { get; set; }
-  
+        public bool FocusOnIngresosPicker { get; set; }
+
+
 
 
         #endregion
 
-        public string DineroEnCaja => Partida.Reference.Ingresos?.Sum(x => x.Cantidad) +"€ Pot (" + Partida.Reference.Ingresos?.Where(x=>x.EsCash).Sum(x => x.Cantidad) + "€ cash)";
-        public bool CajaCuadra => Partida.Reference.Ingresos?.Sum(x => x.Cantidad) == Partida.Reference.Jugadores?.Sum(x => x.DineroAlFinal);
+        public string DineroEnCaja => Partida.Reference.Ingresos?.Sum(x => x.Cantidad) + "€ Pot (" +
+                                      Partida.Reference.Ingresos?.Where(x => x.EsCash).Sum(x => x.Cantidad) + "€ cash)";
+
+        public bool CajaCuadra => Partida.Reference.Ingresos?.Sum(x => x.Cantidad) ==
+                                  Partida.Reference.Jugadores?.Sum(x => x.DineroAlFinal);
+
         public bool PartidaTerminada => Partida.Reference.Terminada;
-        public string DineroParaCambiar =>  Partida.Reference.Jugadores?.Sum(x => x.DineroAlFinal) + "€ para cambiar";
-        public string JugadoresPartida => Partida.Reference.Jugadores?.Count +" jugadores";
+        public string DineroParaCambiar => Partida.Reference.Ingresos?.Sum(x => x.Cantidad)  - Partida.Reference.Jugadores?.Sum(x => x.DineroAlFinal) + "€ para cuadrar";
+        public string JugadoresPartida => Partida.Reference.Jugadores?.Count + " jugadores";
+
         public string TiempoPartida
         {
             get
             {
                 if (Partida.Reference.Terminada)
                 {
-                    return (Partida.Reference.FechaInicio - Partida.Reference.FechaFinal).ToString(@"hh\:mm") + " horas";
+                    return (Partida.Reference.FechaInicio - Partida.Reference.FechaFinal).ToString(@"hh\:mm") +
+                           " horas";
                 }
                 else
                 {
                     return (Partida.Reference.FechaInicio - DateTime.Now).ToString(@"hh\:mm") + " horas";
                 }
-                
+
             }
         }
 
@@ -87,18 +103,19 @@ namespace PokerronBank.UI.ViewModels
             FinPartida = new DelegateCommand(UserWantToFinPartida);
             ReiniciarPartida = new DelegateCommand(UserWantToReiniciarPartida);
             PartidaNueva = new DelegateCommand(UserWantToPartidaNueva);
-        
+
 
             var db = DependencyService.Get<IConfigDataBase>().GetFullPath("PokerronDataBase.db");
             Core = new Core(db);
 
-     
-            Partida = new PartidaViewItem( Core.Services.GetPartida());
+
+            Partida = new PartidaViewItem(Core.Services.GetPartida());
 
             Jugadores.Clear();
             Ingresos.Clear();
-            Partida.Reference.Jugadores.OrderBy(x => Core.Services.GetDineroAlFinal(x, Partida.Reference)).ForEach(x => Jugadores.Insert(0,new JugadorViewItem(x, this)));
-            Partida.Reference.Ingresos.ForEach(x => Ingresos.Insert(0,new IngresoViewItem(x)));
+            Partida.Reference.Jugadores.OrderBy(x => Core.Services.GetDineroAlFinal(x, Partida.Reference))
+                .ForEach(x => Jugadores.Insert(0, new JugadorViewItem(x, this)));
+            Partida.Reference.Ingresos.ForEach(x => Ingresos.Insert(0, new IngresoViewItem(x)));
 
             Device.StartTimer(new TimeSpan(0, 0, 60), () =>
             {
@@ -110,10 +127,10 @@ namespace PokerronBank.UI.ViewModels
 
         private void UserWantToCambiarJugador(object obj)
         {
-            var nombre = ((Tuple<string, bool,string,JugadorViewItem>)obj).Item1;
-            var escaja = ((Tuple<string, bool, string, JugadorViewItem>)obj).Item2;
-            var dineroAlFinal = ((Tuple<string, bool, string, JugadorViewItem>)obj).Item3;
-            var jugador = ((Tuple<string, bool, string, JugadorViewItem>)obj).Item4;
+            var nombre = ((Tuple<string, bool, string, JugadorViewItem>) obj).Item1;
+            var escaja = ((Tuple<string, bool, string, JugadorViewItem>) obj).Item2;
+            var dineroAlFinal = ((Tuple<string, bool, string, JugadorViewItem>) obj).Item3;
+            var jugador = ((Tuple<string, bool, string, JugadorViewItem>) obj).Item4;
 
             jugador.Reference.Nombre = nombre;
             jugador.Reference.EsCaja = escaja;
@@ -145,7 +162,7 @@ namespace PokerronBank.UI.ViewModels
             }
 
             return false;
-    
+
         }
 
         private void UserWantToReiniciarPartida(object obj)
@@ -155,26 +172,49 @@ namespace PokerronBank.UI.ViewModels
             OnPropertyChanged("");
         }
 
-        private void UserWantToFinPartida(object obj)
+        private async void UserWantToFinPartida(object obj)
         {
             Partida.Reference.Terminada = true;
             Partida.Reference.FechaFinal = DateTime.Now;
             Core.Repository.SaveAll();
             OnPropertyChanged("");
 
+
+            var contacts = await Plugin.ContactService.CrossContactService.Current.GetContactListAsync();
+
         }
 
         private void UserWantToCalcularDeudas(object obj)
         {
             Jugadores.Clear();
-            Partida.Reference.Jugadores.OrderBy(x => Core.Services.GetDineroAlFinal(x, Partida.Reference)).ForEach(x => Jugadores.Insert(0, new JugadorViewItem(x, this)));
-            var ret = Core.Services.CalcularDeudas(Partida.Reference);
+            Partida.Reference.Jugadores.OrderBy(x => Core.Services.GetDineroAlFinal(x, Partida.Reference))
+                .ForEach(x => Jugadores.Insert(0, new JugadorViewItem(x, this)));
+            Core.Services.CalcularDeudas(Partida.Reference);
+            foreach (var item in Jugadores)
+            {
+                var ret = "***Final partida*** \n" + 
+                    item.Reference.DeudaDetalle.Replace("Ha", "Has")
+                                                .Replace("Cancela", "Cancelas")
+                                                .Replace("Recibe", "Recibes")
+                                                .Replace("Debe", "Debes");
+               
+                ret += "\n\n***Resumen***\n" + "Has ingresado:" + item.DineroIngresado + "\n" 
+                                            + "Chips al final:" + item.DineroAlFinal 
+                                            + "\n" + "Total ganancias:" + item.Total;
+
+                if (!string.IsNullOrEmpty(item?.Reference?.NumeroTelefono))
+                {
+                    SendWhatsApp(item.Reference.NumeroTelefono, ret);
+                }
+                
+            }
+
             UpdateJugadores();
             OnPropertyChanged("");
             // return ret;
         }
 
-        
+
 
 
         public void UpdateJugadores()
@@ -189,7 +229,7 @@ namespace PokerronBank.UI.ViewModels
             OnPropertyChanged("TiempoPartida");
         }
 
-       
+
         public bool CheckExistNombreJugador(string nombre)
         {
             return Core.Services.CheckExistNombreJugador(nombre, Partida.Reference);
@@ -199,20 +239,23 @@ namespace PokerronBank.UI.ViewModels
 
         private void UserWantToAddIngreso(object obj)
         {
-           
-            var cantidad = ((Tuple<Decimal, bool>)obj).Item1;
-            var esCash = ((Tuple<Decimal, bool>)obj).Item2;
 
-            var newItem = Core.Services.AddNewIngreso(SelectedJugadorPicker?.Reference, cantidad, esCash, Partida.Reference);
-            if (Ingresos.Count > 0)
+            var cantidad = ((Tuple<Decimal, bool>) obj).Item1;
+            var esCash = ((Tuple<Decimal, bool>) obj).Item2;
+
+            var newItem =Core.Services.AddNewIngreso(SelectedJugadorPicker?.Reference, cantidad, esCash, Partida.Reference);
+            var newViewItem = new IngresoViewItem(newItem);
+            Ingresos.Insert(0, newViewItem);
+
+            
+
+            if (!string.IsNullOrEmpty(newItem?.Jugador?.NumeroTelefono))
             {
-                Ingresos.Insert(0,new IngresoViewItem(newItem));
-            }
-            else
-            {
-                Ingresos.Add(new IngresoViewItem(newItem));
+                var ret = "Has ingresado " + newViewItem.DetalleIngreso;
+                SendWhatsApp(SelectedJugadorPicker?.Reference.NumeroTelefono, ret);
             }
             
+
             UpdateJugadores();
 
 
@@ -222,10 +265,14 @@ namespace PokerronBank.UI.ViewModels
 
         private void UserWantToAddJugador(object obj)
         {
-            var nombre = ((Tuple<string, bool>)obj).Item1;
-            var escaja = ((Tuple<string, bool>)obj).Item2;
+            var nombre = ((Tuple<string, bool, bool,bool, ContactViewItem>) obj).Item1;
+            var escaja = ((Tuple<string, bool, bool, bool, ContactViewItem>) obj).Item2;
+            var esAnfitrion = ((Tuple<string, bool, bool, bool, ContactViewItem>) obj).Item3;
+            var whatsAppFunciona = ((Tuple<string, bool, bool, bool, ContactViewItem>) obj).Item4;
+            var contacto = ((Tuple<string, bool, bool, bool, ContactViewItem>) obj).Item5;
 
-            var newItem = Core.Services.AddNewJugador(nombre, escaja, Partida.Reference);
+            var newItem = Core.Services.AddNewJugador(nombre, escaja, esAnfitrion, contacto?.Numero, whatsAppFunciona, Partida.Reference);
+            
             if (Jugadores.Count > 0)
             {
                 Jugadores.Insert(0, new JugadorViewItem(newItem, this));
@@ -235,8 +282,28 @@ namespace PokerronBank.UI.ViewModels
                 Jugadores.Add(new JugadorViewItem(newItem, this));
             }
 
-          
+           
+
+
         }
 
+
+
+
+        public  bool SendWhatsApp(string numero, string mensaje)
+        {
+            var header = "💰💰💰Pokerron🍸🍸🍸\n\n" + mensaje;
+            try
+            {
+                Chat.Open(numero, header);
+                return true;
+               
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
     }
 }

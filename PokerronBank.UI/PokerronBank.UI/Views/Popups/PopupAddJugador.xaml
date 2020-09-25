@@ -23,15 +23,25 @@
     <StackLayout>
         <Frame Margin="30" Padding="10"  Background="{AppThemeBinding Light=White, Dark=Black}">
             <StackLayout>
+                <Button Text="Contactos" Clicked="ButtonContactos" CornerRadius="20"/>
                 <Label Text="Nombre:" />
-                <Entry x:Name="InputNombre"/>
+                <Entry x:Name="InputNombre" />
+                <Label x:Name="Telefono" FontAttributes="Italic" />
                 <StackLayout Orientation="Horizontal">
-                    <CheckBox   x:Name="CheckBoxEsCaja"/>
-                    <Label Text="Es caja" VerticalTextAlignment="Center"  />
+                    <StackLayout Orientation="Horizontal">
+                        <CheckBox   x:Name="CheckBoxEsCaja"/>
+                        <Label Text="Caja" VerticalTextAlignment="Center"  />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" Margin="50,0,0,0">
+                        <CheckBox   x:Name="CheckBoxAnfitrion"/>
+                        <Label Text="Anfitrion" VerticalTextAlignment="Center"  />
+                    </StackLayout>
+                   
                 </StackLayout>
+                   
                 
-                <Button Text="Anadir" Clicked="ButtonOk" CornerRadius="20"/>
-                <Button Text="Cancel" Clicked="ButtonCancel" CornerRadius="20"/>
+                <Button Text="Añadir" Clicked="ButtonOk" CornerRadius="20" Margin="0,10,0,0"/>
+                <Button Text="Cancelar" Clicked="ButtonCancel" CornerRadius="20"/>
             </StackLayout>
         </Frame>
         <!--VerticalOptions="Center" 

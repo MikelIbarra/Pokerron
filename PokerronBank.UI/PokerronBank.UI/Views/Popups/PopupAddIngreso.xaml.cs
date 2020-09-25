@@ -16,14 +16,25 @@ namespace PokerronBank.UI.Views.Popups
         {
             InitializeComponent();
             BindingContext = ViewModelViewManager.MainViewModel;
-            
+            ViewModelViewManager.MainViewModel.SelectedJugadorPicker = null;
 
         }
 
         protected override void OnAppearing()
         {
-            InputCantidad.Unfocus();
-            InputCantidad.Focus();
+            if (ViewModelViewManager.MainViewModel.FocusOnIngresosPicker)
+            {
+                InputCantidad.Unfocus();
+                InputCantidad.Focus();
+            }
+            else
+            {
+                ListaJugadores.Unfocus();
+                ListaJugadores.Focus();
+            }
+           
+
+            
             base.OnAppearing();
         }
 
