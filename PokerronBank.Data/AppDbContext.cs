@@ -37,6 +37,7 @@ namespace PokerronBank.Data
         public DbSet<Jugador> Jugadores { get; set; }
         public DbSet<Ingreso> Ingresos { get; set; }
         public DbSet<Partida> Partidas { get; set; }
+        public DbSet<Compra> Compras { get; set; }
 
 
 

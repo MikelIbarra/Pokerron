@@ -33,6 +33,9 @@ namespace PokerronBank.UI.ViewModels
 
         public ObservableCollection<ContactViewItem> Contacts { get; set; } =
             new ObservableCollection<ContactViewItem>();
+                
+        public ObservableCollection<CompraViewItem> Compras { get; set; } =
+            new ObservableCollection<CompraViewItem>();
 
 
         #endregion
@@ -44,6 +47,7 @@ namespace PokerronBank.UI.ViewModels
         public DelegateCommand AddJugador { get; set; }
         public DelegateCommand CambiarJugador { get; set; }
         public DelegateCommand AddIngreso { get; set; }
+        public DelegateCommand AddCompra { get; set; }
         public DelegateCommand CalcularDeudas { get; set; }
         public DelegateCommand FinPartida { get; set; }
         public DelegateCommand ReiniciarPartida { get; set; }
@@ -103,6 +107,7 @@ namespace PokerronBank.UI.ViewModels
             FinPartida = new DelegateCommand(UserWantToFinPartida);
             ReiniciarPartida = new DelegateCommand(UserWantToReiniciarPartida);
             PartidaNueva = new DelegateCommand(UserWantToPartidaNueva);
+            AddCompra = new DelegateCommand(UserWantToAddCompra);
 
 
             var db = DependencyService.Get<IConfigDataBase>().GetFullPath("PokerronDataBase.db");
@@ -112,10 +117,14 @@ namespace PokerronBank.UI.ViewModels
             Partida = new PartidaViewItem(Core.Services.GetPartida());
 
             Jugadores.Clear();
-            Ingresos.Clear();
             Partida.Reference.Jugadores.OrderBy(x => Core.Services.GetDineroAlFinal(x, Partida.Reference))
                 .ForEach(x => Jugadores.Insert(0, new JugadorViewItem(x, this)));
+
+            Ingresos.Clear();
             Partida.Reference.Ingresos.ForEach(x => Ingresos.Insert(0, new IngresoViewItem(x)));
+
+            Compras.Clear();
+            Partida.Reference.Compras.ForEach(x => Compras.Insert(0, new CompraViewItem(x)));
 
             Device.StartTimer(new TimeSpan(0, 0, 60), () =>
             {
@@ -123,6 +132,11 @@ namespace PokerronBank.UI.ViewModels
                 Device.BeginInvokeOnMainThread(UpdateJugadores);
                 return true; // runs again, or false to stop
             });
+        }
+
+        private void UserWantToAddCompra(object obj)
+        {
+           
         }
 
         private void UserWantToCambiarJugador(object obj)

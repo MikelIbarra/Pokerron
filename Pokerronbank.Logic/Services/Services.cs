@@ -190,6 +190,14 @@ namespace Pokerronbank.Logic.Services
             return newItem;
         }
 
+        public Compra AddCompra(string nombre, Decimal cantidad)
+        {
+            var newItem = new Compra(nombre, cantidad);
+            Core.Repository.Add(newItem);
+            Core.Repository.SaveAll();
+            return newItem;
+        }
+
         public void DeleteJugador(Jugador jugador, Partida partida)
         {
             partida.Jugadores.Remove(jugador);

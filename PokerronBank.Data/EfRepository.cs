@@ -19,7 +19,7 @@ namespace PokerronBank.Data
             Context = new AppDbContext(dataBaseFileName);
 
 
-            var version = "0.02";
+            var version = "0.03";
             var versionDb = "";
 
             Context.Database.EnsureCreated();

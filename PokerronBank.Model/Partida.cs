@@ -10,6 +10,7 @@ namespace PokerronBank.Model
         public DateTime FechaFinal { get; set; }
         public virtual  List<Jugador> Jugadores { get; set; } = new List<Jugador>();
         public virtual List<Ingreso> Ingresos { get; set; } = new List<Ingreso>();
+        public virtual List<Compra> Compras { get; set; } = new List<Compra>();
         public bool Terminada { get; set; }
 
         public Partida()
