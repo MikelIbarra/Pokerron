@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using PokerronBank.UI.ViewModels;
-using PokerronBank.UI.Views;
+﻿using PokerronBank.UI.ViewModels;
 using Xamarin.Forms;
 
 namespace PokerronBank.UI
@@ -11,7 +7,10 @@ namespace PokerronBank.UI
     {
         //Views
         public static MainPage MainPage { get; set; }
-        public static PartidaView PartidaView { get; set; }
+        //public static PartidaView PartidaView { get; set; }
+        //public static IngresosView IngresosView { get; set; }
+        //public static DeudasView DeudasView { get; set; }
+        //public static ComprasView ComprasView { get; set; }
     
 
 
@@ -24,11 +23,16 @@ namespace PokerronBank.UI
             if (!(Application.Current.MainPage is MainPage mainPage)) return;
             //Views----
             MainPage = mainPage;
-            PartidaView = new PartidaView();
+            //PartidaView = new PartidaView();
+            //PartidaView = new PartidaView();
+            //PartidaView = new PartidaView();
 
             //ViewModel
             MainPage.BindingContext = MainViewModel;
-            PartidaView.BindingContext = MainViewModel;
+            //PartidaView.BindingContext = MainViewModel;
+            //IngresosView.BindingContext = MainViewModel;
+            //DeudasView.BindingContext = MainViewModel;
+            //ComprasView.BindingContext = MainViewModel;
            
 
         }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PokerronBank.Model;
 
 namespace PokerronBank.Data
@@ -29,6 +27,7 @@ namespace PokerronBank.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($"Filename={DbPath}");
+            optionsBuilder.UseLazyLoadingProxies();
         }
        
 
@@ -36,8 +35,9 @@ namespace PokerronBank.Data
        public DbSet<DataBaseVersion> DataBaseVersion { get; set; }
         public DbSet<Jugador> Jugadores { get; set; }
         public DbSet<Ingreso> Ingresos { get; set; }
-        public DbSet<Partida> Partidas { get; set; }
         public DbSet<Compra> Compras { get; set; }
+        public DbSet<Partida> Partidas { get; set; }
+        public DbSet<JugadorCompra> JugadorCompras { get; set; }
 
 
 

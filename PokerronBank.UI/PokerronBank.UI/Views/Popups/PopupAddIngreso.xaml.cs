@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using static Rg.Plugins.Popup.Services.PopupNavigation;
 
@@ -123,7 +120,7 @@ namespace PokerronBank.UI.Views.Popups
                 await DisplayAlert("", "Seleccione un jugador", "Ok");
                 InputStart = false;
             }
-            else if (decimal.TryParse(InputCantidad.Text, out cantidad))
+            else if (decimal.TryParse(InputCantidad.Text, NumberStyles.Any, new CultureInfo("en-US"), out cantidad))
             {
                 var text = ViewModelViewManager.MainViewModel.SelectedJugadorPicker.Reference.Nombre + " ingresa " + cantidad + "€";
                 if (CheckBoxEsCash.IsChecked)
@@ -138,13 +135,14 @@ namespace PokerronBank.UI.Views.Popups
                 if (confirm)
                 {
                     ViewModelViewManager.MainViewModel.AddIngreso.Execute(new Tuple<decimal, bool>(cantidad, CheckBoxEsCash.IsChecked));
+                    ViewModelViewManager.MainViewModel.SelectedJugadorPicker = null;
                     await PopAsync();
                 }
                 else
                 {
                     InputStart = false;
                 }
-                ViewModelViewManager.MainViewModel.SelectedJugadorPicker = null;
+                
             }
             else
             {

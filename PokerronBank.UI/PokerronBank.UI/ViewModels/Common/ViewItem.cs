@@ -1,9 +1,4 @@
-﻿using System;
-using System;
-using System.Windows;
-
-
-namespace PokerronBank.UI.ViewModels.Common
+﻿namespace PokerronBank.UI.ViewModels.Common
 {
     public class ViewItem : ViewModelBase
     {

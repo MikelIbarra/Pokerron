@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             xmlns:helper="clr-namespace:PokerronBank.UI.Views.Helper;assembly=PokerronBank.UI"
+             x:Class="PokerronBank.UI.Views.Popups.PopupAddCompra">
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8"
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"
+        />
+    </pages:PopupPage.Animation>
+    <!--You can use any elements here which are extended from Xamarin.Forms.View-->
+    <StackLayout >
+        <Frame Margin="30" Padding="10"  Background="{AppThemeBinding Light=White, Dark=Black}">
+            <StackLayout>
+                <Picker Title="Lista jugadores" x:Name="ListaJugadores" ItemsSource="{Binding Jugadores}" ItemDisplayBinding="{Binding Reference.Nombre}" 
+                        SelectedItem="{Binding SelectedJugadorPicker, Mode=TwoWay}"  />
+                <Label Text="Concepto:" />
+                <Entry x:Name="InputConcepto" />
+
+                <Label Text="Cantidad:"  />
+                <helper:CustomEntry IsNumeric="True" x:Name="InputCantidad" Keyboard="Numeric" />
+                
+                <StackLayout Orientation="Horizontal">
+                    <CheckBox   x:Name="CheckBoxTodos" CheckedChanged="CheckBoxTodos_CheckedChanged" />
+                    <Label Text="Todos" VerticalTextAlignment="Center"  />
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+                    <CheckBox   x:Name="CheckBoxTodosMenosAnfitrion" CheckedChanged="CheckBoxTodosMenosAnfitrion_CheckedChanged"/>
+                    <Label Text="Todos menos anfitrion" VerticalTextAlignment="Center"  />
+                </StackLayout>
+                <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="black"/>
+                <Label Text="Participan:"  />
+                <ListView   x:Name="ListCompras" ItemsSource="{Binding JugadoresCompra}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" >
+                                    <CheckBox IsChecked="{Binding ParticipaEnCompra}"  CheckedChanged="ListBoxCheckBox_CheckedChanged" />
+                                    <Label Text="{Binding Reference.Nombre}" FontAttributes="Bold" VerticalTextAlignment="Center" Margin="5,0,0,0"  />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="black"/>
+                <Button Text="Añadir" x:Name="BotonAnadir" Clicked="ButtonOk" CornerRadius="20"/>
+                <Button Text="Cancel" Clicked="ButtonCancel" CornerRadius="20"/>
+            </StackLayout>
+        </Frame>
+        <!--VerticalOptions="Center" 
+        HorizontalOptions="Center" 
+        Padding="20, 20, 20, 20">-->
+
+    </StackLayout>
+</pages:PopupPage>

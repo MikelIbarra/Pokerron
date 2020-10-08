@@ -30,8 +30,7 @@
             <StackLayout BackgroundColor="LightGreen">
                 <Image Source="Pokerron2.png"  
                        HorizontalOptions="Center"
-                       VerticalOptions="Start"
-                       />
+                       VerticalOptions="Start"/>
 
             </StackLayout>
            
@@ -44,8 +43,9 @@
                 <views:PartidaView   />
                 <views:IngresosView  />
                 <views:DeudasView  />
+                <views:ComprasView  />
             </tabs:ViewSwitcher>
-            <!-- first 4 rows then... -->
+         
             <tabs:TabHostView x:Name="TabHost"
                               Grid.Row="2"
                               BackgroundColor="DarkGray"
@@ -54,22 +54,18 @@
                                               Mode=TwoWay}">
                 <tabs:TabHostView.Tabs >
                     <tabs:BottomTabItem Label="Partida"   VerticalOptions="End" 
-                                            Style="{StaticResource BottomTabStyle}" 
-                                          IconImageSource="Partida2Png64.png"
-                                          
-                                            />
+                                        Style="{StaticResource BottomTabStyle}" 
+                                        IconImageSource="Partida2Png64.png"/>
                     <tabs:BottomTabItem Label="Ingresos" VerticalOptions="End"  
                                         Style="{StaticResource BottomTabStyle}"
                                         IconImageSource="IngresosPng64.png"/>
                     <tabs:BottomTabItem Label="Deudas"    VerticalOptions="End" 
                                         Style="{StaticResource BottomTabStyle}"
-                                        IconImageSource="Deudas2Png64.png"
-                                        />
-                    <tabs:BottomTabItem  Label="Compras"  VerticalOptions="End" 
+                                        IconImageSource="Deudas2Png64.png"/>
+                    <tabs:BottomTabItem Label="Compras"    VerticalOptions="End" 
                                         Style="{StaticResource BottomTabStyle}"
-                                      
-                   />
-                   
+                                        IconImageSource="Compras64.png"/>
+
                 </tabs:TabHostView.Tabs>
             </tabs:TabHostView>
 

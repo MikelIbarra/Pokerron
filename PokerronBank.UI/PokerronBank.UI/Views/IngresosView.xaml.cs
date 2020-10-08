@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PokerronBank.UI.ViewModels.Helper;
 using PokerronBank.UI.Views.Popups;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -37,5 +34,23 @@ namespace PokerronBank.UI.Views
             canClickBotonNuevoIngreso = true;
           
         }
+
+
+        private bool canClickReenviarDeuda = true;
+        private async void ReenviarIngreso(object sender, EventArgs e)
+        {
+            if (!canClickReenviarDeuda) return;
+            canClickReenviarDeuda = false;
+            var mi = ((MenuItem)sender);
+            var ingreso = (mi.CommandParameter as IngresoViewItem);
+            ListIngresos.SelectedItem = ingreso;
+            var nombre = ingreso?.Reference.Jugador.Nombre;
+            if (await Application.Current.MainPage.DisplayAlert("Reenviar ingreso a " + nombre + "?", "", "Aceptar", "Cancelar"))
+            {
+                ViewModelViewManager.MainViewModel.EnviarIngreso(ingreso);
+            }
+            canClickReenviarDeuda = true;
+        }
+       
     }
 }

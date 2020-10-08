@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using static System.Math;
 
 namespace Pokerronbank.Logic.Services
@@ -20,7 +18,7 @@ namespace Pokerronbank.Logic.Services
         {
             Core.Repository.SaveAll();
 
-            partida.Jugadores.ForEach(x => x.DeudaDetalle = "");
+            partida.Jugadores.ForEach(x => x.DeudaDetalleHelp = "");
             partida.Jugadores.ForEach(x => x.DeudaHelp = GetDineroIngresadoSinCash(x,partida));
             partida.Jugadores.ForEach(x => x.DeudaHelp -= x.DineroAlFinal);
             if (partida.Ingresos.Sum(x => x.Cantidad) != partida.Jugadores.Sum(x => x.DineroAlFinal)) return false;
@@ -34,20 +32,20 @@ namespace Pokerronbank.Logic.Services
                 var cashIngresado = partida.Ingresos.Where(x => x.Jugador == item && x.EsCash).Sum(x => x.Cantidad);
                 if (cashIngresado > 0)
                 {
-                    item.DeudaDetalle = "Ha ingresado " + cashIngresado + "€ en cash";
+                    item.DeudaDetalleHelp = "Ha ingresado " + cashIngresado.ToString("#.##") + "€ en cash";
                 }
                 //cancelar pagares
                 if (item.DineroAlFinal > 0 && partida.Ingresos.Any(x => x.Jugador == item && !x.EsCash))
                 {
                     if (partida.Ingresos.Where(x => x.Jugador == item && !x.EsCash).Sum(x=>x.Cantidad) >= item.DineroAlFinal)
                     {
-                        if (item.DeudaDetalle != "") item.DeudaDetalle += "\n";
-                        item.DeudaDetalle += "Cancela " + item.DineroAlFinal + "€ en pagares";
+                        if (item.DeudaDetalleHelp != "") item.DeudaDetalle += "\n";
+                        item.DeudaDetalleHelp += "Cancela " + item.DineroAlFinal.ToString("#.##") + "€ en pagares";
                     }
                     else
                     {
-                        if (item.DeudaDetalle != "") item.DeudaDetalle += "\n";
-                        item.DeudaDetalle += "Cancela " + partida.Ingresos.Where(x => x.Jugador == item && !x.EsCash).Sum(x => x.Cantidad) + "€ en pagares";
+                        if (item.DeudaDetalleHelp != "") item.DeudaDetalle += "\n";
+                        item.DeudaDetalleHelp += "Cancela " + partida.Ingresos.Where(x => x.Jugador == item && !x.EsCash).Sum(x => x.Cantidad).ToString("#.##") + "€ en pagares";
                     }
                 }
             }
@@ -79,23 +77,23 @@ namespace Pokerronbank.Logic.Services
                 var newLine = "";
                 if (cash >= -jugador.DeudaHelp)
                 {
-                    if (jugador.DeudaDetalle != "") newLine = "\n";
-                    jugador.DeudaDetalle +=  newLine +"Recibe " + (-jugador.DeudaHelp )+ "€ en cash";
+                    if (jugador.DeudaDetalleHelp != "") newLine = "\n";
+                    jugador.DeudaDetalleHelp +=  newLine +"Recibe " + (-jugador.DeudaHelp ).ToString("#.##") + "€ en cash";
                     ret += jugador.DeudaHelp;
                     jugador.DeudaHelp = 0;
                     return ret;
                 }
-                if (jugador.DeudaDetalle != "") newLine = "\n";
+                if (jugador.DeudaDetalleHelp != "") newLine = "\n";
                 jugador.DeudaHelp += cash;
-                jugador.DeudaDetalle += newLine + "Recibe " + cash + "€ en cash";
+                jugador.DeudaDetalleHelp += newLine + "Recibe " + cash.ToString("#.##") + "€ en cash";
                 ret = 0;
             }
 
-            while (jugador.DeudaHelp < 0)
+            while (Abs(decimal.ToDouble(jugador.DeudaHelp)) > 0.01)
             {
                 foreach (var item in perdedores)
                 {
-                    if (item.DeudaHelp > 0)
+                    if (decimal.ToDouble(item.DeudaHelp) > 0.01)
                     {
                         if (item.DeudaHelp >= -(jugador.DeudaHelp))
                         {
@@ -118,31 +116,104 @@ namespace Pokerronbank.Logic.Services
 
         public void JugadorDetalleDeuda(Jugador ganador, Jugador perdedor, decimal cantidad)
         {
-            if (ganador.DeudaDetalle == "")
+            if (ganador.DeudaDetalleHelp == "")
             {
-                ganador.DeudaDetalle = "Recibe " + cantidad + "€ de " + perdedor.Nombre;
+                ganador.DeudaDetalleHelp = "Recibe " + cantidad.ToString("#.##") + "€ de " + perdedor.Nombre;
 
             }
             else
             {
-                ganador.DeudaDetalle += "\nRecibe " + cantidad + "€ de " + perdedor.Nombre;
+                ganador.DeudaDetalleHelp += "\nRecibe " + cantidad.ToString("#.##") + "€ de " + perdedor.Nombre;
             }
-            if (perdedor.DeudaDetalle == "")
+            if (perdedor.DeudaDetalleHelp == "")
             {
-                perdedor.DeudaDetalle = "Debe " + cantidad + "€ a " + ganador.Nombre;
+                perdedor.DeudaDetalleHelp = "Debe " + cantidad.ToString("#.##") + "€ a " + ganador.Nombre;
 
             }
             else
             {
-                perdedor.DeudaDetalle += "\nDebe " + cantidad + "€ a " + ganador.Nombre;
+                perdedor.DeudaDetalleHelp += "\nDebe " + cantidad.ToString("#.##") + "€ a " + ganador.Nombre;
             }
+        }
+
+        public bool CalcularDeudasCompras(Partida partida)
+        {
+            Core.Repository.SaveAll();
+
+            partida.Jugadores.ForEach(x => x.DeudaDetalleHelp = "");
+            partida.Jugadores.ForEach(x => x.DeudaHelp =0);
+
+            //Cuanto debe cada jugador
+            partida.Compras.ForEach(x =>
+            {
+                x.JugadorQueHaPagadoCompra.DeudaHelp += -x.Cantidad;
+
+                if (x.JugadoresCompra.Count > 0)
+                {
+                    var pagarPorPersona = x.Cantidad / x.JugadoresCompra.Count;
+                    x.JugadoresCompra.ForEach(y => y.Jugador.DeudaHelp += pagarPorPersona);
+                }
+
+
+            });
+
+            var total = Abs(decimal.ToDouble(partida.Jugadores.Sum(x => x.DeudaHelp)));
+            if (total > 0.01 )
+            {
+                var fallo = 1;
+            }
+
+            var aDevolver = partida.Jugadores.Where(x => x.DeudaHelp < 0).ToList().OrderBy(x => x.DeudaHelp);
+            var aPagar = partida.Jugadores.Where(x => x.DeudaHelp > 0).ToList().OrderByDescending(x => x.DeudaHelp);
+
+
+            //primero cobra los caja
+            foreach (var item in aDevolver)
+            {
+                 CalcularDeudaJugador(item, aPagar.Where(x => x.DeudaHelp > 0).ToList(), 0);
+            }
+            
+            partida.Jugadores.ForEach(x => x.DeudaCompraDetalle = x.DeudaDetalleHelp);
+            return true;
+        }
+
+        public string GetJugadorCompraDetalle(Jugador jugador, Partida partida)
+        {
+            var ret = "";
+
+
+            if (partida.Compras.Any(x => x.JugadoresCompra.Select(y=>y.Jugador).Contains(jugador)))
+            {
+                ret += "Participa:";
+                partida.Compras.Where(x => x.JugadoresCompra.Select(y=>y.Jugador).Contains(jugador)).ToList().ForEach(x =>
+                {
+
+                    ret += "\n -" + x.Nombre + " " + (x.Cantidad / x.JugadoresCompra.Count).ToString("#.#") + "€";
+                });
+            }
+
+
+            if (partida.Compras.Any(x => x.JugadorQueHaPagadoCompra == jugador))
+            {
+                ret += "\n\nHa pagado:";
+                partida.Compras.Where(x => x.JugadorQueHaPagadoCompra == jugador).ToList().ForEach(x =>
+                {
+                    ret += "\n -" + x.Nombre + " " + x.Cantidad + "€";
+                });
+
+            }
+
+
+            return ret;
         }
 
         public Partida GetPartida()
         {
            var partidaList =  Core.Repository.GetAll<Partida>().ToList();
-            Core.Repository.GetAll<Jugador>();
-            Core.Repository.GetAll<Ingreso>();
+            var jugadores = Core.Repository.GetAll<Jugador>();
+            var ingresos = Core.Repository.GetAll<Ingreso>();
+            var compras = Core.Repository.GetAll<Compra>();
+            var jugadorCompra = Core.Repository.GetAll<JugadorCompra>();
             return partidaList.Count == 0 ? CreatePartida() : partidaList.First();
         }
 
@@ -154,6 +225,8 @@ namespace Pokerronbank.Logic.Services
             Core.Repository.GetAll<Partida>().ToList().ForEach(x => Core.Repository.Delete(x));
             Core.Repository.GetAll<Jugador>().ToList().ForEach(x => Core.Repository.Delete(x));
             Core.Repository.GetAll<Ingreso>().ToList().ForEach(x => Core.Repository.Delete(x));
+            Core.Repository.GetAll<Compra>().ToList().ForEach(x => Core.Repository.Delete(x));
+            Core.Repository.GetAll<JugadorCompra>().ToList().ForEach(x => Core.Repository.Delete(x));
 
             Core.Repository.Add(newItem);
             Core.Repository.SaveAll();
@@ -190,12 +263,40 @@ namespace Pokerronbank.Logic.Services
             return newItem;
         }
 
-        public Compra AddCompra(string nombre, Decimal cantidad)
+        public Compra AddCompra(string nombre, Decimal cantidad, Partida partida,Jugador jugadorQuePagaCompra ,List<Jugador> jugadores)
         {
-            var newItem = new Compra(nombre, cantidad);
+            var newItem = new Compra(nombre, cantidad, partida, jugadorQuePagaCompra);
+            foreach (var jug in jugadores)
+            {
+                var newItem2 = new JugadorCompra(jug, newItem);
+                newItem.JugadoresCompra.Add(newItem2);
+                Core.Repository.Add(newItem2);
+            }
+            
             Core.Repository.Add(newItem);
+         
             Core.Repository.SaveAll();
             return newItem;
+        }
+
+        public void CambiarCompra(Compra compra, string nombre, Decimal cantidad, Partida partida, Jugador jugadorQuePagaCompra, List<Jugador> jugadores)
+        {
+
+            compra.Cantidad = cantidad;
+            compra.Nombre = nombre;
+            compra.JugadorQueHaPagadoCompra = jugadorQuePagaCompra;
+
+            compra.JugadoresCompra.Where(x => !jugadores.Contains(x.Jugador)).ToList().ForEach(x => Core.Repository.Delete(x));
+            compra.JugadoresCompra.Where(x => !jugadores.Contains(x.Jugador)).ToList().ForEach(x => compra.JugadoresCompra.Remove(x));
+            jugadores.Where(x => compra.JugadoresCompra.All(y => y.Jugador != x)).ToList().ForEach(x =>
+            {
+                var newItem = new JugadorCompra(x, compra);
+                compra.JugadoresCompra.Add(newItem);
+                Core.Repository.Add(newItem);
+            });
+
+            Core.Repository.SaveAll();
+
         }
 
         public void DeleteJugador(Jugador jugador, Partida partida)
@@ -206,7 +307,14 @@ namespace Pokerronbank.Logic.Services
            
         }
 
+        public void DeleteCompra(Compra compra, Partida partida)
+        {
+            partida.Compras.Remove(compra);
+            compra.JugadoresCompra.ForEach(x => Core.Repository.Delete(x));
+            Core.Repository.Delete(compra);
+            Core.Repository.SaveAll();
 
+        }
         public bool CheckExistNombreJugador(string nombre,  Partida partida)
         {
             

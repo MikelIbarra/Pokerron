@@ -34,7 +34,13 @@
               <ListView.ItemTemplate>
                   <DataTemplate>
                       <ViewCell>
-                          <StackLayout Orientation="Horizontal" >
+                          <ViewCell.ContextActions>
+                              <MenuItem Clicked="ReenviarIngreso"
+                                        CommandParameter="{Binding .}"
+                                        Text="Reenviar Ingreso" />
+
+                          </ViewCell.ContextActions>
+                            <StackLayout Orientation="Horizontal" >
                                 <Label Text="{Binding Reference.Jugador.Nombre}" FontAttributes="Bold" VerticalTextAlignment="Center" Margin="5,0,0,0"  />
                               <Label Text="{Binding DetalleIngreso}"  VerticalTextAlignment="Center" />
                           </StackLayout>

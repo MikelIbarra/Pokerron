@@ -2,6 +2,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:helper="clr-namespace:PokerronBank.UI.Views.Helper;assembly=PokerronBank.UI"
+             
              x:Class="PokerronBank.UI.Views.ComprasView">
 
     <ContentView.Content>
@@ -25,11 +26,11 @@
                         <helper:TransparentSelectableEffect />
                     </ImageButton.Effects>
                     <ImageButton.Triggers>
-                        <DataTrigger TargetType="ImageButton" Binding="{Binding PartidaTerminada}" Value="false">
-                            <Setter Property="Source"  Value="ButtonAnadirJugador.png" />
+                        <DataTrigger TargetType="ImageButton" Binding="{Binding ComprasIngresoView}" Value="true">
+                            <Setter Property="Source"  Value="ButtonAnadirCompra.png" />
                         </DataTrigger>
-                        <DataTrigger TargetType="ImageButton" Binding="{Binding PartidaTerminada}" Value="true">
-                            <Setter Property="Source"  Value="ButtonNuevaPartida.png"/>
+                        <DataTrigger TargetType="ImageButton" Binding="{Binding ComprasIngresoView}" Value="false">
+                            <Setter Property="Source"  Value="ButtonEnviarDeudas.png"/>
                         </DataTrigger>
                     </ImageButton.Triggers>
                 </ImageButton>
@@ -45,55 +46,104 @@
                               BorderColor="Transparent"
                               BackgroundColor="Transparent"
                               Margin="5,0,0,0"
-                              Clicked="BotonCalcularDeudas" >
+                              Clicked="BotonCambioVista" >
                     <ImageButton.Effects>
                         <helper:TransparentSelectableEffect />
                     </ImageButton.Effects>
                     <ImageButton.Triggers>
-                        <DataTrigger TargetType="ImageButton" Binding="{Binding PartidaTerminada}" Value="false">
-                            <Setter Property="Source"  Value="ButtonFinPartida.png" />
+                        <DataTrigger TargetType="ImageButton" Binding="{Binding ComprasIngresoView}" Value="true">
+                            <Setter Property="Source"  Value="ButtonVerDeudas.png" />
                         </DataTrigger>
-                        <DataTrigger TargetType="ImageButton" Binding="{Binding PartidaTerminada}" Value="true">
-                            <Setter Property="Source"  Value="ButtonReiniciarPartida.png"/>
+                        <DataTrigger TargetType="ImageButton" Binding="{Binding ComprasIngresoView}" Value="false">
+                            <Setter Property="Source"  Value="ButtonVerCompras.png"/>
                         </DataTrigger>
                     </ImageButton.Triggers>
                 </ImageButton>
             </Grid>
-            <ListView Grid.Row="1" x:Name="ComprasList" ItemsSource="{Binding Compras}" HasUnevenRows="True" MinimumHeightRequest="60" >
-                <ListView.Behaviors>
-                    <helper:AutoSizeBehavior />
-                </ListView.Behaviors>
-                <ListView.ItemTemplate >
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid Margin="0,10,0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="200"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <StackLayout Orientation="Horizontal"  Grid.Column="0">
-                                    <Label Text="{Binding Reference.Nombre}" FontAttributes="Bold" VerticalTextAlignment="Center" Margin="5,0,0,0"  />
-                                    <Image  Source="cofre.png" HeightRequest="24" WidthRequest="24">
-                                        <Image.Triggers>
-                                            <DataTrigger TargetType="Image" Binding="{Binding Reference.EsCaja}" Value="false">
-                                                <Setter Property="IsVisible"  Value="False" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Image" Binding="{Binding Reference.EsCaja}" Value="true">
-                                                <Setter Property="IsVisible"  Value="True"  />
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                    <Label Text="{Binding DineroAlFinalYTotal}"  VerticalTextAlignment="Center"  FontSize="15" />
+            <StackLayout Grid.Row="1" >
+                <ListView x:Name="ComprasList" ItemsSource="{Binding Compras}" HasUnevenRows="True" MinimumHeightRequest="60" IsVisible="{Binding ComprasIngresoView}" >
+                    <ListView.Behaviors>
+                        <helper:AutoSizeBehavior />
+                    </ListView.Behaviors>
+                    <ListView.ItemTemplate >
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.ContextActions>
+                                    <MenuItem Clicked="OnCambiar"
+                                              CommandParameter="{Binding .}"
+                                              Text="Cambiar" />
+                                    <MenuItem Clicked="OnBorrar"
+                                              CommandParameter="{Binding .}"
+                                              Text="Borrar" IsDestructive="True" />
+                                </ViewCell.ContextActions>
+                                <Grid Margin="0,10,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout Orientation="Horizontal"  Grid.Column="0">
+                                        <Label Text="{Binding Reference.Nombre}" FontAttributes="Bold" VerticalTextAlignment="Center" Margin="5,0,0,0"  />
+                                      
+                                        <StackLayout Margin="5,0,0,0"  >
+                                            <Label Text="{Binding Cantidad}"  VerticalTextAlignment="Center"  FontSize="15" />
+                                            <Label Text="{Binding JugadorQueHaPagadoCompra}" VerticalTextAlignment="Center" />
+                                        </StackLayout>
+                                       
 
-                                </StackLayout>
-                                <Label Text="{Binding Reference.DeudaDetalle}"  Grid.Column="1"   VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand" FontAttributes="Bold"/>
+                                    </StackLayout>
+                                    <Label Text="{Binding JugadoresQuePagan}"  Grid.Column="1"   VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
 
 
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+
+                <ListView x:Name="DeudasList" ItemsSource="{Binding Jugadores}" HasUnevenRows="True" MinimumHeightRequest="60" IsVisible="{Binding ComprasDeudasView}" >
+                    <ListView.Behaviors>
+                        <helper:AutoSizeBehavior />
+                    </ListView.Behaviors>
+                    <ListView.ItemTemplate >
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.ContextActions>
+                                    <MenuItem Clicked="ReenviarDeuda"
+                                              CommandParameter="{Binding .}"
+                                              Text="Reenviar deuda" />
+                                    
+                                </ViewCell.ContextActions>
+                                <Grid Margin="0,10,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout Orientation="Horizontal"  Grid.Column="0">
+                                        <Label Text="{Binding Reference.Nombre}" FontAttributes="Bold" VerticalTextAlignment="Center" Margin="5,0,0,0"  />
+                                        <Image  Source="Anfitrion.png" HeightRequest="24" WidthRequest="24">
+                                            <Image.Triggers>
+                                                <DataTrigger TargetType="Image" Binding="{Binding Reference.EsAnfitrion}" Value="false">
+                                                    <Setter Property="IsVisible"  Value="False" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Image" Binding="{Binding Reference.EsAnfitrion}" Value="true">
+                                                    <Setter Property="IsVisible"  Value="True"  />
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                        </Image>
+                                        <Label Text="{Binding DetalleCompra}" VerticalTextAlignment="Center" Margin="5,0,0,0"  />
+                                    </StackLayout>
+                                    <Label Text="{Binding Reference.DeudaCompraDetalle}"  Grid.Column="1"   VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand" FontAttributes="Bold"/>
+
+
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackLayout>
+            
         </Grid>
 
     </ContentView.Content>

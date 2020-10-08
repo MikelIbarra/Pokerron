@@ -1,4 +1,6 @@
 ﻿using Android.Content;
+using Android.Text.Method;
+using PokerronBank.UI.Droid;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -19,6 +21,11 @@ namespace PokerronBank.UI.Droid
                 var nativeEditText = (global::Android.Widget.EditText)Control;
                 nativeEditText.SetSelectAllOnFocus(true);
             }
+
+          
         }
     }
 }
+
+
+

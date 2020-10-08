@@ -1,6 +1,4 @@
-﻿using System;
-using PokerronBank.Data;
-using Pokerronbank.Logic.Services;
+﻿using PokerronBank.Data;
 using PokerronBank.Model.Contracts;
 
 namespace Pokerronbank.Logic

@@ -12,17 +12,22 @@ namespace PokerronBank.Model
         [NotMapped]
         public Decimal DeudaHelp { get; set; }
 
-        public virtual List<Jugador> Jugadores { get; set; } = new List<Jugador>();
+        public virtual Jugador JugadorQueHaPagadoCompra { get; set; }
+
+        //Deberia ser solo Jugador pero da error en el Lazy loading
+        public virtual List<JugadorCompra> JugadoresCompra { get; set; } = new List<JugadorCompra>();
 
         public Compra()
         {
 
         }
-        public Compra(string nombre, Decimal cantidad)
+        public Compra(string nombre, Decimal cantidad, Partida partida, Jugador jugadorQueHaPagadoCompra)
         {
             Nombre = nombre;
-            Cantidad = cantidad;
-
+            Cantidad = cantidad; 
+            JugadorQueHaPagadoCompra = jugadorQueHaPagadoCompra;
+            partida.Compras.Add(this);
+            
         }
     }
 }

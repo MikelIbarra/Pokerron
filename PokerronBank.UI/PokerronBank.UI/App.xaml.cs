@@ -1,7 +1,5 @@
 ﻿using PokerronBank.UI.Views;
-using System;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace PokerronBank.UI
 {
@@ -10,8 +8,10 @@ namespace PokerronBank.UI
         public App()
         {
             InitializeComponent();
-            
-           // MainPage = new MainPage();
+
+
+
+            // MainPage = new MainPage();
 
             MainPage = new MainView();
             //App.Current.Resources = new DarkTheme();

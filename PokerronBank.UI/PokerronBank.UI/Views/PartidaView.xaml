@@ -107,8 +107,8 @@
                                     </StackLayout>
                                     <StackLayout Orientation="Horizontal" Grid.Row="1"  >
                                         <Label Text="Chips al final: "  VerticalTextAlignment="Center" FontSize="12" FontAttributes="Italic"/>
-                                        
-                                        <Entry  Text="{Binding DineroAlFinal}" Keyboard="Numeric"  HorizontalOptions="FillAndExpand" VerticalTextAlignment="Start"
+
+                                        <helper:CustomEntry IsNumeric="True"    Text="{Binding DineroAlFinal}"  Keyboard="Numeric"  HorizontalOptions="FillAndExpand" VerticalTextAlignment="Start"
                                                 CursorPosition="0" SelectionLength="20" FontSize="12" >
                                             <Entry.Triggers>
                                                 <DataTrigger TargetType="Entry" Binding="{Binding MainViewModel.PartidaTerminada}" Value="false">
@@ -118,7 +118,7 @@
                                                     <Setter Property="IsEnabled"  Value="False" />
                                                 </DataTrigger>
                                             </Entry.Triggers>
-                                        </Entry> 
+                                        </helper:CustomEntry> 
                                     </StackLayout>
                                 </Grid>
                             </Grid>

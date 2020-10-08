@@ -1,14 +1,11 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
 using Plugin.Permissions;
 using PokerronBank.UI.Droid;
 using PokerronBank.UI.Views.Helper;
 using Sharpnado.Presentation.Forms.Droid;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: ResolutionGroupName("MobileClient")]

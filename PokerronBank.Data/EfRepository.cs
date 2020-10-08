@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using PokerronBank.Model;
 using PokerronBank.Model.Contracts;
 
@@ -19,7 +17,7 @@ namespace PokerronBank.Data
             Context = new AppDbContext(dataBaseFileName);
 
 
-            var version = "0.03";
+            var version = "0.10";
             var versionDb = "";
 
             Context.Database.EnsureCreated();

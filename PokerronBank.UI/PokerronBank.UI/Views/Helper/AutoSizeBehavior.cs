@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
+﻿using Xamarin.Forms;
 
 namespace PokerronBank.UI.Views.Helper
 {
-    using System;
-    using System.Linq;
     public class AutoSizeBehavior : Behavior<ListView>
     {
         ListView _ListView;

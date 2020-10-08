@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Plugin.ContactService.Shared;
-using Plugin.Permissions;
+﻿using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
-using PokerronBank.UI.ViewModels;
 using PokerronBank.UI.ViewModels.Helper;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -21,10 +13,13 @@ namespace PokerronBank.UI.Views
         {
             InitializeComponent();
             TabHost.SelectedIndex = 0;
+           
         }
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+
 
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -62,5 +57,8 @@ namespace PokerronBank.UI.Views
 
             
         }
+
+    
+
     }
 }

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:helper="clr-namespace:PokerronBank.UI.Views.Helper;assembly=PokerronBank.UI"
              x:Class="PokerronBank.UI.Views.DeudasView"
+             
             >
 
     <ContentView.Content>
@@ -30,16 +31,27 @@
                 <Label Text="{Binding JugadoresPartida}"  HorizontalOptions="Center"/>
                 <Label Text="{Binding TiempoPartida}"  HorizontalOptions="Center"/>
             </StackLayout>
-           
-        </Grid>
+                <ImageButton  Grid.Column="2"  BorderColor="Transparent" BackgroundColor="Transparent"
+                              Margin="5,0,0,0" Source="ButtonEnviarDeudas.png" Clicked="EnviarDeudas" >
+                    <ImageButton.Effects>
+                        <helper:TransparentSelectableEffect />
+                    </ImageButton.Effects>
+                </ImageButton>
+            </Grid>
         <ListView Grid.Row="1" x:Name="DeudasList" ItemsSource="{Binding Jugadores}" HasUnevenRows="True" MinimumHeightRequest="60" >
                 <ListView.Behaviors>
                     <helper:AutoSizeBehavior />
                 </ListView.Behaviors>
                 <ListView.ItemTemplate >
-                <DataTemplate>
+                    <DataTemplate>
                     <ViewCell>
-                        <Grid Margin="0,10,0,10">
+                        <ViewCell.ContextActions>
+                            <MenuItem Clicked="ReenviarDeuda"
+                                      CommandParameter="{Binding .}"
+                                      Text="Reenviar deuda" />
+
+                        </ViewCell.ContextActions>
+                            <Grid Margin="0,10,0,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="200"/>
                                 <ColumnDefinition Width="*"/>

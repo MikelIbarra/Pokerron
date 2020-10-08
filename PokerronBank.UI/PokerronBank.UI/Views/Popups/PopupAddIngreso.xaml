@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             xmlns:helper="clr-namespace:PokerronBank.UI.Views.Helper;assembly=PokerronBank.UI"
              x:Class="PokerronBank.UI.Views.Popups.PopupAddIngreso" 
             >
     <pages:PopupPage.Animation>
@@ -26,7 +27,7 @@
                         SelectedItem="{Binding SelectedJugadorPicker, Mode=TwoWay}"  />
 
                 <Label Text="Cantidad:"  />
-                <Entry x:Name="InputCantidad" Keyboard="Numeric" />
+                <helper:CustomEntry IsNumeric="True" x:Name="InputCantidad" Keyboard="Numeric" />
                     
                     <StackLayout Orientation="Horizontal">
                     <CheckBox   x:Name="CheckBoxEsCash" />
