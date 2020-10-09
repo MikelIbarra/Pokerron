@@ -27,7 +27,7 @@ namespace PokerronBank.UI.ViewModels.Helper
 
                 if (Reference?.Cantidad > 0)
                 {
-                    return Reference.Cantidad + "€ -> " + Reference.JugadoresCompra.Count + " x " + (Reference.Cantidad / Reference.JugadoresCompra.Count).ToString("#.#") + "€";
+                    return Reference.Cantidad + "€ -> " + Reference.JugadoresCompra.Count + " x " + (Reference.Cantidad / Reference.JugadoresCompra.Count).ToString("0.##") + "€";
                 }
                 return "0€";
 

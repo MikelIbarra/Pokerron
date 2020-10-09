@@ -22,7 +22,7 @@
     <StackLayout >
         <Frame Margin="30" Padding="10"  Background="{AppThemeBinding Light=White, Dark=Black}">
             <StackLayout>
-                <Picker Title="Lista jugadores" x:Name="ListaJugadores" ItemsSource="{Binding Jugadores}" ItemDisplayBinding="{Binding Reference.Nombre}" 
+                <Picker Title="Quien ha pagado esta compra?" x:Name="ListaJugadores" ItemsSource="{Binding Jugadores}" ItemDisplayBinding="{Binding Reference.Nombre}" 
                         SelectedItem="{Binding SelectedJugadorPicker, Mode=TwoWay}"  />
                 <Label Text="Concepto:" />
                 <Entry x:Name="InputConcepto" />
@@ -41,7 +41,7 @@
                 </StackLayout>
                 <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="black"/>
                 <Label Text="Participan:"  />
-                <ListView   x:Name="ListCompras" ItemsSource="{Binding JugadoresCompra}">
+                <ListView   x:Name="ListCompras" ItemsSource="{Binding JugadoresCompra}" SelectionMode="None">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>

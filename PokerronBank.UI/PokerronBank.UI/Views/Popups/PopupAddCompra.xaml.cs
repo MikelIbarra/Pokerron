@@ -40,8 +40,8 @@ namespace PokerronBank.UI.Views.Popups
 
             if (Compra == null)
             {
-                InputConcepto.Unfocus();
-                InputConcepto.Focus();
+                ListaJugadores.Unfocus();
+                ListaJugadores.Focus();
                 CheckBoxTodosMenosAnfitrion.IsChecked = true;
             }
             else
@@ -51,7 +51,7 @@ namespace PokerronBank.UI.Views.Popups
                 ListCompras.Focus();
                 BotonAnadir.Text = "Cambiar";
                 InputConcepto.Text = Compra.Reference.Nombre;
-                InputCantidad.Text = Compra.Reference.Cantidad.ToString() ?? "";
+                InputCantidad.Text = Compra.Reference.Cantidad.ToString().Replace(",",".") ?? "";
                 ViewModelViewManager.MainViewModel.SelectedJugadorPicker = ViewModelViewManager.MainViewModel.Jugadores.FirstOrDefault(x => x.Reference == Compra.Reference.JugadorQueHaPagadoCompra);
                 ViewModelViewManager.MainViewModel.JugadoresCompra.ForEach(x => x.ParticipaEnCompra = Compra.Reference.JugadoresCompra.Any(y => x.Reference == y.Jugador));
                 CheckBoxTodos.IsChecked = ViewModelViewManager.MainViewModel.JugadoresCompra.All(x => x.ParticipaEnCompra);

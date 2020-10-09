@@ -32,20 +32,20 @@ namespace Pokerronbank.Logic.Services
                 var cashIngresado = partida.Ingresos.Where(x => x.Jugador == item && x.EsCash).Sum(x => x.Cantidad);
                 if (cashIngresado > 0)
                 {
-                    item.DeudaDetalleHelp = "Ha ingresado " + cashIngresado.ToString("#.##") + "€ en cash";
+                    item.DeudaDetalleHelp = "Ha ingresado " + cashIngresado.ToString("0.##") + "€ en cash";
                 }
                 //cancelar pagares
                 if (item.DineroAlFinal > 0 && partida.Ingresos.Any(x => x.Jugador == item && !x.EsCash))
                 {
                     if (partida.Ingresos.Where(x => x.Jugador == item && !x.EsCash).Sum(x=>x.Cantidad) >= item.DineroAlFinal)
                     {
-                        if (item.DeudaDetalleHelp != "") item.DeudaDetalle += "\n";
-                        item.DeudaDetalleHelp += "Cancela " + item.DineroAlFinal.ToString("#.##") + "€ en pagares";
+                        if (item.DeudaDetalleHelp != "") item.DeudaDetalleHelp += "\n";
+                        item.DeudaDetalleHelp += "Cancela " + item.DineroAlFinal.ToString("0.##") + "€ en pagares";
                     }
                     else
                     {
-                        if (item.DeudaDetalleHelp != "") item.DeudaDetalle += "\n";
-                        item.DeudaDetalleHelp += "Cancela " + partida.Ingresos.Where(x => x.Jugador == item && !x.EsCash).Sum(x => x.Cantidad).ToString("#.##") + "€ en pagares";
+                        if (item.DeudaDetalleHelp != "") item.DeudaDetalleHelp += "\n";
+                        item.DeudaDetalleHelp += "Cancela " + partida.Ingresos.Where(x => x.Jugador == item && !x.EsCash).Sum(x => x.Cantidad).ToString("0.##") + "€ en pagares";
                     }
                 }
             }
@@ -78,14 +78,14 @@ namespace Pokerronbank.Logic.Services
                 if (cash >= -jugador.DeudaHelp)
                 {
                     if (jugador.DeudaDetalleHelp != "") newLine = "\n";
-                    jugador.DeudaDetalleHelp +=  newLine +"Recibe " + (-jugador.DeudaHelp ).ToString("#.##") + "€ en cash";
+                    jugador.DeudaDetalleHelp +=  newLine +"Recibe " + (-jugador.DeudaHelp ).ToString("0.##") + "€ en cash";
                     ret += jugador.DeudaHelp;
                     jugador.DeudaHelp = 0;
                     return ret;
                 }
                 if (jugador.DeudaDetalleHelp != "") newLine = "\n";
                 jugador.DeudaHelp += cash;
-                jugador.DeudaDetalleHelp += newLine + "Recibe " + cash.ToString("#.##") + "€ en cash";
+                jugador.DeudaDetalleHelp += newLine + "Recibe " + cash.ToString("0.##") + "€ en cash";
                 ret = 0;
             }
 
@@ -118,21 +118,21 @@ namespace Pokerronbank.Logic.Services
         {
             if (ganador.DeudaDetalleHelp == "")
             {
-                ganador.DeudaDetalleHelp = "Recibe " + cantidad.ToString("#.##") + "€ de " + perdedor.Nombre;
+                ganador.DeudaDetalleHelp = "Recibe " + cantidad.ToString("0.##") + "€ de " + perdedor.Nombre;
 
             }
             else
             {
-                ganador.DeudaDetalleHelp += "\nRecibe " + cantidad.ToString("#.##") + "€ de " + perdedor.Nombre;
+                ganador.DeudaDetalleHelp += "\nRecibe " + cantidad.ToString("0.##") + "€ de " + perdedor.Nombre;
             }
             if (perdedor.DeudaDetalleHelp == "")
             {
-                perdedor.DeudaDetalleHelp = "Debe " + cantidad.ToString("#.##") + "€ a " + ganador.Nombre;
+                perdedor.DeudaDetalleHelp = "Debe " + cantidad.ToString("0.##") + "€ a " + ganador.Nombre;
 
             }
             else
             {
-                perdedor.DeudaDetalleHelp += "\nDebe " + cantidad.ToString("#.##") + "€ a " + ganador.Nombre;
+                perdedor.DeudaDetalleHelp += "\nDebe " + cantidad.ToString("0.##") + "€ a " + ganador.Nombre;
             }
         }
 
@@ -188,7 +188,7 @@ namespace Pokerronbank.Logic.Services
                 partida.Compras.Where(x => x.JugadoresCompra.Select(y=>y.Jugador).Contains(jugador)).ToList().ForEach(x =>
                 {
 
-                    ret += "\n -" + x.Nombre + " " + (x.Cantidad / x.JugadoresCompra.Count).ToString("#.#") + "€";
+                    ret += "\n -" + x.Nombre + " " + (x.Cantidad / x.JugadoresCompra.Count).ToString("0.##") + "€";
                 });
             }
 
